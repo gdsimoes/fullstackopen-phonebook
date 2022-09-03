@@ -1,8 +1,11 @@
 const express = require("express");
 const app = express();
 
+// For req.body
+app.use(express.json());
+
 // Person array
-const persons = [
+let persons = [
     {
         id: 1,
         name: "Arto Hellas",
@@ -22,6 +25,11 @@ const persons = [
         id: 4,
         name: "Mary Poppendieck",
         number: "39-23-6423122",
+    },
+    {
+        id: 5,
+        name: "Guilherme Dias Simoes",
+        number: "6475628093",
     },
 ];
 
@@ -48,6 +56,51 @@ app.get("/api/persons/:id", (req, res) => {
         res.json(person);
     } else {
         res.status(404).end();
+    }
+});
+
+// Delete a specific person
+app.delete("/api/persons/:id", (req, res) => {
+    const id = Number(req.params.id);
+    persons = persons.filter((person) => person.id !== id);
+
+    res.status(204).end();
+});
+
+// Generate suitable id
+const generateId = () => {
+    let id = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+
+    // Unlikely to be unnecessary and duplicate ids are very unlikely
+    // Should probably be removed
+    while (persons.find((person) => person.id === id) !== undefined) {
+        id = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+    }
+
+    return id;
+};
+
+// Add a person
+app.post("/api/persons", (req, res) => {
+    console.log(req.body);
+    const { name, number } = req.body;
+
+    if (name === undefined) {
+        res.status(400).json({ error: "name missing" });
+    } else if (number === undefined) {
+        res.status(400).json({ error: "number missing" });
+    } else if (persons.find((person) => person.name === name) !== undefined) {
+        res.status(409).json({ error: "name must be unique" });
+    } else {
+        const person = {
+            name,
+            number,
+            id: generateId(),
+        };
+
+        persons.push(person);
+
+        res.json(person);
     }
 });
 
