@@ -25,6 +25,7 @@ const persons = [
     },
 ];
 
+// Display info
 app.get("/info", (req, res) => {
     const page = `
         <p>Phonebook has infor for ${persons.length}</p>
@@ -34,8 +35,20 @@ app.get("/info", (req, res) => {
     res.send(page);
 });
 
+// Get all persons
 app.get("/api/persons", (req, res) => {
     res.send(persons);
+});
+
+// Get a specific person
+app.get("/api/persons/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const person = persons.find((person) => person.id === id);
+    if (person !== undefined) {
+        res.json(person);
+    } else {
+        res.status(404).end();
+    }
 });
 
 const PORT = 3001;
