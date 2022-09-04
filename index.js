@@ -3,12 +3,22 @@ const morgan = require("morgan");
 
 const app = express();
 
-// HTTP request logger middleware
-// https://github.com/expressjs/morgan
-app.use(morgan("tiny"));
-
 // For req.body
 app.use(express.json());
+
+// Morgan - HTTP request logger middleware
+// https://github.com/expressjs/morgan
+morgan.token("post-body", (req, res) => {
+    if (req.method === "POST") {
+        return JSON.stringify(req.body);
+    }
+});
+
+app.use(
+    morgan(
+        ":method :url :status :res[content-length] - :response-time ms :post-body"
+    )
+);
 
 // Request logger middleware
 // const requestLogger = (req, res, next) => {
@@ -98,7 +108,6 @@ const generateId = () => {
 
 // Add a person
 app.post("/api/persons", (req, res) => {
-    console.log(req.body);
     const { name, number } = req.body;
 
     if (name === undefined) {
