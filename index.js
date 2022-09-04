@@ -1,8 +1,24 @@
 const express = require("express");
+const morgan = require("morgan");
+
 const app = express();
+
+// HTTP request logger middleware
+// https://github.com/expressjs/morgan
+app.use(morgan("tiny"));
 
 // For req.body
 app.use(express.json());
+
+// Request logger middleware
+// const requestLogger = (req, res, next) => {
+//     console.log("Method:", req.method);
+//     console.log("Path:  ", req.path);
+//     console.log("Body:  ", req.body);
+//     console.log("---");
+//     next();
+// };
+// app.use(requestLogger);
 
 // Person array
 let persons = [
@@ -103,6 +119,12 @@ app.post("/api/persons", (req, res) => {
         res.json(person);
     }
 });
+
+// Unknown endpoint middleware
+// const unknownEndpoint = (req, res) => {
+//     res.status(404).send({ error: "unknown endpoint" });
+// };
+// app.use(unknownEndpoint);
 
 const PORT = 3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
