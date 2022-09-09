@@ -52,11 +52,6 @@ let persons = [
         name: "Mary Poppendieck",
         number: "39-23-6423122",
     },
-    {
-        id: 5,
-        name: "Guilherme Dias Simoes",
-        number: "6475628093",
-    },
 ];
 
 // Display info
