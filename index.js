@@ -57,7 +57,7 @@ let persons = [
 // Display info
 app.get("/info", (req, res) => {
     const page = `
-        <p>Phonebook has infor for ${persons.length}</p>
+        <p>Phonebook has info for ${persons.length}</p>
         <p>${new Date().toString()}</p>
     `;
 
