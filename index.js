@@ -26,9 +26,13 @@ let persons = [
     },
 ];
 
+morgan.token("req-body", function (req, res) {
+    return JSON.stringify(req.body);
+});
+
 // Middleware
 app.use(express.json());
-app.use(morgan("tiny"));
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :req-body"));
 
 app.get("/", (req, res) => {
     res.send("<h1>Hello, World!</h1>");
@@ -64,17 +68,18 @@ app.delete("/api/persons/:id", (req, res) => {
 
 // Create a new person
 app.post("/api/persons", (req, res) => {
-    const person = req.body;
+    const { name, number } = req.body;
 
     // Error handling
-    if (!person.name) {
+    if (!name) {
         return res.status(400).json({ error: "name property missing" });
-    } else if (!person.number) {
+    } else if (!number) {
         return res.status(400).json({ error: "number property missing" });
-    } else if (persons.find((p) => p.name === person.name)) {
+    } else if (persons.find((p) => p.name === name)) {
         return res.status(400).json({ error: "name must be unique" });
     }
 
+    const person = { name, number };
     person.id = crypto.randomUUID();
     persons = persons.concat(person);
     res.json(person);

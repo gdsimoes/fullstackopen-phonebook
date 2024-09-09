@@ -3,6 +3,7 @@ Content-Type: application/json
 
 {
     "name": "Gabriel Pensador",
-    "number": "2345678"
+    "number": "2345678",
+    "randomProperty": 17
 }
 
