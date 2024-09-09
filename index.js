@@ -24,6 +24,8 @@ let persons = [
     },
 ];
 
+app.use(express.json());
+
 app.get("/", (req, res) => {
     res.send("<h1>Hello, World!</h1>");
 });
@@ -54,6 +56,14 @@ app.delete("/api/persons/:id", (req, res) => {
     const id = req.params.id;
     persons = persons.filter((person) => person.id !== id);
     res.status(204).end();
+});
+
+// Create a new person
+app.post("/api/persons", (req, res) => {
+    const person = req.body;
+    person.id = crypto.randomUUID();
+    persons = persons.concat(person);
+    res.json(person);
 });
 
 const PORT = 3001;
