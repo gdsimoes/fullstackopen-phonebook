@@ -61,6 +61,16 @@ app.delete("/api/persons/:id", (req, res) => {
 // Create a new person
 app.post("/api/persons", (req, res) => {
     const person = req.body;
+
+    // Error handling
+    if (!person.name) {
+        return res.status(400).json({ error: "name property missing" });
+    } else if (!person.number) {
+        return res.status(400).json({ error: "number property missing" });
+    } else if (persons.find((p) => p.name === person.name)) {
+        return res.status(400).json({ error: "name must be unique" });
+    }
+
     person.id = crypto.randomUUID();
     persons = persons.concat(person);
     res.json(person);
