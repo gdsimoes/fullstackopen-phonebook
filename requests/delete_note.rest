@@ -1,1 +1,1 @@
-DELETE http://localhost:3001/api/persons/2
+DELETE https://fullstackopen-phonebook-patient-bush-5005.fly.dev/api/persons/2
