@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 const app = express();
 
@@ -31,9 +32,11 @@ morgan.token("req-body", function (req, res) {
 });
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :req-body"));
 
+// Jus for testing
 app.get("/", (req, res) => {
     res.send("<h1>Hello, World!</h1>");
 });
