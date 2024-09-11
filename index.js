@@ -1,6 +1,10 @@
+require("dotenv").config({ path: [".env.local"] });
+
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+
+const Person = require("./models/person");
 
 const app = express();
 
@@ -27,14 +31,13 @@ let persons = [
     },
 ];
 
-morgan.token("req-body", function (req, res) {
-    return JSON.stringify(req.body);
-});
-
 // Middleware
 app.use(cors());
 app.use(express.static("dist"));
 app.use(express.json());
+morgan.token("req-body", function (req, res) {
+    return JSON.stringify(req.body);
+});
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :req-body"));
 
 // Just for testing
@@ -49,18 +52,16 @@ app.get("/info", (req, res) => {
 
 // Show all persons
 app.get("/api/persons", (req, res) => {
-    res.json(persons);
+    Person.find({}).then((person) => {
+        res.json(person);
+    });
 });
 
 // Show a single person
 app.get("/api/persons/:id", (req, res) => {
-    const id = req.params.id;
-    const person = persons.find((person) => person.id === id);
-    if (person) {
+    Person.findById(req.params.id).then((person) => {
         res.json(person);
-    } else {
-        res.status(404).end();
-    }
+    });
 });
 
 // Delete a person
