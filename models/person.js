@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // Is this really necessary?
-mongoose.set("strictQuery", false);
+// mongoose.set("strictQuery", false);
 
 const url = process.env.MONGODB_URI;
 
