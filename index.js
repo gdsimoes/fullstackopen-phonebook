@@ -78,6 +78,24 @@ app.post("/api/persons", (req, res, next) => {
         .catch((error) => next(error));
 });
 
+// Update a person
+app.put("/api/persons/:id", (req, res, next) => {
+    const { name, number } = req.body;
+
+    // Error handling
+    if (!name) {
+        throw new PropertyMissingError("name property missing");
+    } else if (!number) {
+        throw new PropertyMissingError("number property missing");
+    }
+
+    Person.findByIdAndUpdate(req.params.id, { name, number }, { new: true })
+        .then((person) => {
+            res.json(person);
+        })
+        .catch((error) => next(error));
+});
+
 // Error handling
 const errorHandler = (error, req, res, next) => {
     console.error(error.message);
