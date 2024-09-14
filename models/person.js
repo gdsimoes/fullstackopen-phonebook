@@ -18,7 +18,16 @@ mongoose
 
 const personSchema = new mongoose.Schema({
     name: { type: String, minLength: 3, required: true },
-    number: { type: String, required: true },
+    number: {
+        type: String,
+        validate: {
+            validator: (value) => /^(\d{2,3})-(\d+)$/.test(value) && value.length >= 8,
+            message:
+                "The number should consist of 2 or 3 digits, followed by a hyphen, " +
+                "and then followed by only digits, with a total of at least 7 digits.",
+        },
+        required: true,
+    },
 });
 
 personSchema.set("toJSON", {
