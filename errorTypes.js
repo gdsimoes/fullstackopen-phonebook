@@ -1,8 +1,8 @@
-class PropertyMissingError extends Error {
+class NotFoundError extends Error {
     constructor(message) {
         super(message);
-        this.name = "PropertyMissingError";
+        this.name = "NotFoundError";
     }
 }
 
-module.exports = PropertyMissingError;
+module.exports = NotFoundError;
