@@ -13,9 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.static("dist"));
 app.use(express.json());
-morgan.token("req-body", function (req, res) {
-    return JSON.stringify(req.body);
-});
+morgan.token("req-body", (req) => JSON.stringify(req.body));
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :req-body"));
 
 // Just for testing
@@ -24,7 +22,7 @@ app.get("/", (req, res) => {
 });
 
 // Show info
-app.get("/info", (req, res) => {
+app.get("/info", (req, res, next) => {
     Person.countDocuments()
         .then((count) => {
             res.send(`<p>Phonebook has info for ${count} people</p><p>${new Date()}</p>`);
@@ -94,7 +92,7 @@ const errorHandler = (error, req, res, next) => {
         return res.status(400).send({ error: "malformatted id" });
     } else if (error.name === "ValidationError") {
         return res.status(400).send({ error: error.message });
-    } else if ((error.name = "NotFoundError")) {
+    } else if (error.name === "NotFoundError") {
         return res.status(404).send({ error: error.message });
     }
 
